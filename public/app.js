@@ -44,7 +44,7 @@ function renderAuth(){
        <div class="feature-row"><span>▶ Video Courses</span><span>▤ PPT & PDF</span><span>✓ Exams & Quizzes</span><span>💬 Discussions</span></div>
      </div>
    </section>
-   <section class="auth-panel"><div class="authbox">
+   < class="auth-panel">< class="authbox">
      <div class="mobile-logo"><div class="brandmark">WU</div><b>Werabe CS Learning Hub</b></div>
      <p class="eyebrow">WELCOME BACK</p><h1>Sign in to your account</h1><p class="muted">Continue your Computer Science learning journey.</p>
      <form class="form" onsubmit="login(event)">
@@ -53,9 +53,14 @@ function renderAuth(){
        <button class="btn big">Sign in</button>
      </form>
      <div class="switch">New student? <button class="textbtn" onclick="showRegister()">Create account</button></div>
-     <div class="demo-card"><b>Demo logins</b><small>Student: student@werabe.edu.et / Student@12345</small><small>Teacher: teacher@werabe.edu.et / Teacher@12345</small><small>Admin: admin@werabe.edu.et / Admin@12345</small></div>
-   </div></section>
- </div>`;
+     
+ <div class="demo-card">
+  <b>Demo accounts</b>
+  <small>Student: student@werabe.edu.et</small>
+  <small>Teacher: teacher@werabe.edu.et</small>
+  <small>Admin: admin@werabe.edu.et</small>
+  <small class="muted">Demo passwords are not displayed publicly.</small>
+</div>
 }
 function showRegister(){
  document.body.className="";
