@@ -3,6 +3,7 @@
 Runnable full-stack Computer Science learning platform designed from the supplied blue university dashboard reference.
 
 ## Features
+
 - Student / Teacher / Admin login
 - Student registration and role-based access
 - Courses and enrollment
@@ -22,6 +23,7 @@ Runnable full-stack Computer Science learning platform designed from the supplie
 - Password hashing and security headers
 
 ## Run
+
 1. Extract the ZIP.
 2. Open the folder in VS Code.
 3. Open Terminal.
@@ -31,11 +33,15 @@ Runnable full-stack Computer Science learning platform designed from the supplie
 5. Open http://localhost:3000
 
 ## Demo accounts
-- Student: student@werabe.edu.et / Student@12345
-- Teacher: teacher@werabe.edu.et / Teacher@12345
-- Admin: admin@werabe.edu.et / Admin@12345
+
+- Student: student@werabe.edu.et
+- Teacher: teacher@werabe.edu.et
+- Admin: admin@werabe.edu.et
+
+> Demo passwords are not displayed publicly.
 
 ## Main files
+
 - server.js — Express backend/API/database
 - public/app.js — frontend application
 - public/style.css — UI based on the supplied reference
@@ -44,22 +50,23 @@ Runnable full-stack Computer Science learning platform designed from the supplie
 - uploads/ — uploaded learning materials, created automatically
 
 ## Before real university deployment
+
 Set a strong SESSION_SECRET, use HTTPS, secure cookies, a production session store, backups, audit logs, rate limiting, file scanning, managed storage/database, and university identity integration.
 
 ## Teacher/Admin Content Management
 
-Log in with:
-- Teacher: `teacher@werabe.edu.et` / `Teacher@12345`
-- Admin: `admin@werabe.edu.et` / `Admin@12345`
+Authorized teachers and administrators can log in using their assigned credentials.
 
 Then open **Teacher Tools** or **My Courses**.
 
 ### Add a course
+
 1. Click **+ Create course**.
 2. Enter course code, title, description, and credit hours.
 3. Click **Create**.
 
 ### Add PPT/PDF/documents
+
 1. Open the course.
 2. Open **Materials**.
 3. Click **+ Upload**.
@@ -70,6 +77,7 @@ Then open **Teacher Tools** or **My Courses**.
 Material upload limit: 10 MB.
 
 ### Add a video
+
 1. Open the course.
 2. Open **Videos**.
 3. Click **+ Add Video**.
@@ -78,4 +86,5 @@ Material upload limit: 10 MB.
 6. Click **Add Video**.
 
 ### Add quizzes and assignments
+
 Open the course and choose **Quizzes** or **Assignments**, then use the create button.
