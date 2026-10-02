@@ -3,3 +3,5 @@ uploads/
 data/*.db
 .env
 .DS_Store
+data/*.db-wal
+data/*.db-shm
