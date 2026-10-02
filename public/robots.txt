@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://werabe-university-cs-learning-hub-2.onrender.com/sitemap.xml
