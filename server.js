@@ -724,7 +724,7 @@ app.post("/api/auth/login", async (req, res) => {
 
     if (
       !u ||
-      !u.isActive ||
+      !u.isactive ||
       !bcrypt.compareSync(req.body.password || "", u.password_hash)
     ) {
       return res.status(401).json({
@@ -2018,7 +2018,7 @@ app.get("/api/users", role("admin"), async (req, res) => {
           role,
           year,
           section,
-          isActive,
+          isactive AS "isActive",
           created_at
         FROM users
         ORDER BY created_at DESC
@@ -2091,3 +2091,4 @@ async function startServer() {
 }
 
 startServer();
+
