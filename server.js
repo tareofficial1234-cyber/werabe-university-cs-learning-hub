@@ -10,12 +10,20 @@ const fs = require("fs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
-fs.mkdirSync(path.join(ROOT, "data"), {recursive:true});
-const db = new Database(path.join(ROOT, "data", "werabe.db"));
+
+// Persistent storage support for Render.
+// Locally, the app keeps using ./data and ./uploads. On Render, set
+// DATA_DIR=/var/data so the SQLite database and uploaded files live on
+// the attached persistent disk.
+const DATA_DIR = process.env.DATA_DIR || path.join(ROOT, "data");
+const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(ROOT, "uploads");
+
+fs.mkdirSync(DATA_DIR, {recursive:true});
+fs.mkdirSync(UPLOAD_DIR, {recursive:true});
+
+const db = new Database(path.join(DATA_DIR, "werabe.db"));
 db.pragma("foreign_keys = ON");
 db.pragma("journal_mode = WAL");
-
-fs.mkdirSync(path.join(ROOT, "uploads"), {recursive:true});
 
 app.use(helmet({contentSecurityPolicy:false}));
 app.use(express.json({limit:"2mb"}));
@@ -27,7 +35,7 @@ app.use(session({
   cookie:{httpOnly:true,sameSite:"lax",secure:false,maxAge:1000*60*60*8}
 }));
 app.use(express.static(path.join(ROOT,"public")));
-app.use("/uploads", express.static(path.join(ROOT,"uploads")));
+app.use("/uploads", express.static(UPLOAD_DIR));
 
 db.exec(`
 CREATE TABLE IF NOT EXISTS users(
@@ -252,7 +260,7 @@ seed();
 
 const upload = multer({
  storage: multer.diskStorage({
-  destination: (_req,_file,cb)=>cb(null,path.join(ROOT,"uploads")),
+  destination: (_req,_file,cb)=>cb(null,UPLOAD_DIR),
   filename: (_req,file,cb)=>cb(null,Date.now()+"-"+file.originalname.replace(/[^a-zA-Z0-9._-]/g,"_"))
  }),
  limits:{fileSize:10*1024*1024},
@@ -265,7 +273,7 @@ const upload = multer({
 
 const videoUpload = multer({
  storage: multer.diskStorage({
-  destination: (_req,_file,cb)=>cb(null,path.join(ROOT,"uploads")),
+  destination: (_req,_file,cb)=>cb(null,UPLOAD_DIR),
   filename: (_req,file,cb)=>cb(null,"video-"+Date.now()+"-"+file.originalname.replace(/[^a-zA-Z0-9._-]/g,"_"))
  }),
  limits:{fileSize:200*1024*1024},
@@ -311,7 +319,15 @@ app.post("/api/auth/change-password",auth,(req,res)=>{
  db.prepare("UPDATE users SET password_hash=? WHERE id=?").run(bcrypt.hashSync(newPassword,12),user(req).id);
  res.json({ok:true});
 });
-app.get("/api/health",(_req,res)=>res.json({ok:true,app:"Werabe CS Learning Hub"}));
+app.get("/api/health",(_req,res)=>res.json({
+ ok:true,
+ app:"Werabe CS Learning Hub",
+ storage:{
+  database:path.join(DATA_DIR,"werabe.db"),
+  uploads:UPLOAD_DIR,
+  persistent:!!process.env.DATA_DIR
+ }
+}));
 
 app.get("/api/auth/me",(req,res)=>res.json({user:user(req)||null}));
 
