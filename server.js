@@ -6,6 +6,35 @@ const multer = require("multer");
 const helmet = require("helmet");
 const path = require("path");
 const fs = require("fs");
+const { v2: cloudinary } = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+function uploadToCloudinary(buffer, originalName) {
+  return new Promise((resolve, reject) => {
+    const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: "raw",
+        folder: "werabe-cs-learning-hub/materials",
+        public_id: `${Date.now()}-${safeName}`,
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      },
+    );
+
+    stream.end(buffer);
+  });
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -583,17 +612,8 @@ async function seed() {
 /* =========================================================
    FILE UPLOAD
 ========================================================= */
-
 const upload = multer({
-  storage: multer.diskStorage({
-    destination: (_req, _file, cb) => cb(null, UPLOAD_DIR),
-
-    filename: (_req, file, cb) =>
-      cb(
-        null,
-        Date.now() + "-" + file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_"),
-      ),
-  }),
+  storage: multer.memoryStorage(),
 
   limits: {
     fileSize: 10 * 1024 * 1024,
@@ -1432,15 +1452,20 @@ app.post(
 
       const type = path.extname(req.file.originalname).slice(1).toUpperCase();
 
-      const url = "/uploads/" + req.file.filename;
+      const cloudinaryResult = await uploadToCloudinary(
+        req.file.buffer,
+        req.file.originalname,
+      );
+
+      const url = cloudinaryResult.secure_url;
 
       const result = await db
         .prepare(
           `
-          INSERT INTO materials
-          (title,description,type,file_url,file_size,course_id,uploaded_by)
-          VALUES(?,?,?,?,?,?,?)
-        `,
+    INSERT INTO materials
+    (title,description,type,file_url,file_size,course_id,uploaded_by)
+    VALUES(?,?,?,?,?,?,?)
+    `,
         )
         .run(
           req.body.title || req.file.originalname,
@@ -2091,4 +2116,3 @@ async function startServer() {
 }
 
 startServer();
-
