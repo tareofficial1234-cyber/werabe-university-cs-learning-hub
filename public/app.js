@@ -110,7 +110,6 @@ function renderAuth() {
        <button class="btn big">Sign in</button>
      </form>
      <div class="switch">New student? <button class="textbtn" onclick="showRegister()">Create account</button></div>
-     <div class="demo-card"><b>Demo logins</b><small>Student: student@werabe.edu.et / Student@12345</small><small>Teacher: teacher@werabe.edu.et / Teacher@12345</small><small>Admin: admin@werabe.edu.et / Admin@12345</small></div>
    </div></section>
  </div>`;
 }
