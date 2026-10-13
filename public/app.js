@@ -253,7 +253,7 @@ function courseTabContent(d) {
       d.materials
         .map(
           (m) =>
-            `<div class="material"><div class="fileicon">📄</div><div class="grow"><b>${esc(m.title)}</b><div class="muted">${esc(m.description)} • ${esc(m.type)}</div></div><a class="btn secondary small" href="${m.file_url}" target="_blank" rel="noopener noreferrer">Open</a>${isStudent ? `<button class="btn ghost small" onclick="bookmark(${m.id})">🔖</button>` : ""}</div>`,
+            `<div class="material"><div class="fileicon">📄</div><div class="grow"><b>${esc(m.title)}</b><div class="muted">${esc(m.description)} • ${esc(m.type)}</div></div><a class="btn secondary small" href="${esc(m.file_url)}" target="_blank" rel="noopener noreferrer">Open</a>${isStudent ? `<button class="btn ghost small" onclick="bookmark(${m.id})">🔖</button>` : ""}</div>`,
         )
         .join("") ||
       `<div class="card"><p class="muted">No materials yet.</p></div>`;
